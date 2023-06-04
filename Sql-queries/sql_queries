@@ -1,0 +1,44 @@
+Answer 1
+
+SELECT 
+  t1.id AS route_id, t1.name, SUM(t2.distance) AS total_distance 
+FROM 
+  routes t1 
+JOIN 
+  route_points t2 ON t1.id = t2.route_id 
+GROUP BY 
+  t2.route_id 
+ORDER BY 
+  total_distance desc;
+
+----------------------------------------------------------------------------------------
+
+Answer 2
+
+SELECT
+  rp1.route_id AS route_id,
+  rp1.stop_id AS source_stop_id,
+  rp2.stop_id AS dest_stop_id
+FROM
+  routes_points AS rp1
+JOIN
+  routes_points AS rp2 ON rp1.route_id = rp2.route_id
+WHERE
+  rp1.order = 1
+  AND rp2.order = (SELECT MAX(`order`) FROM routes_points WHERE route_id = rp2.route_id)
+  AND rp1.route_id IN (SELECT DISTINCT route_id FROM routes_points)
+ORDER BY
+  rp1.route_id;
+
+----------------------------------------------------------------------------------------
+
+Answer 3
+
+SELECT 
+   t2.station_id, t1.name as station_name, t2.slot, t2.time 
+FROM 
+   station t1 
+JOIN 
+   times t2 ON t1.id = t2.station_id 
+where
+   t2.station_id = 1 and t2.slot = 1;
