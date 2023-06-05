@@ -13,8 +13,6 @@ from database import Base ,engine , SessionLocal
 import schema
 import models
 
-# to get a string like this run:
-# openssl rand -hex 32
 SECRET_KEY = "b8219fbdd3b014a1cc7b75579bf1c018642a64ec54e105fb5bd09b0a098999b0"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 5
@@ -29,36 +27,6 @@ def get_db():
     finally:
         db.close()
 
-
-# fake_users_db = {
-#     "johndoe": {
-#         "username": "johndoe",
-#         "full_name": "John Doe",
-#         "email": "johndoe@example.com",
-#         "hashed_password": "",
-#         "disabled": False,
-#     }
-# }
-
-
-# class Token(BaseModel):
-#     access_token: str
-#     token_type: str
-
-
-# class TokenData(BaseModel):
-#     username: str | None = None
-
-
-# class User(BaseModel):
-#     username: str
-#     email: str | None = None
-#     full_name: str | None = None
-#     disabled: bool | None = None
-
-
-# class UserInDB(User):
-#     hashed_password: str
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -78,9 +46,6 @@ def get_password_hash(password):
 
 def get_user(db, username: str):
     user_detail = db.query(models.User).filter(models.User.name == username).first()
-    # # print(**user_detail)
-    # user_details = dict(user_detail)
-    # print(user_details)
     if user_detail:
         user_details = user_detail.__dict__
         user_details.pop("_sa_instance_state", None)
