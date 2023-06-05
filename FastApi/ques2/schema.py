@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class Token(BaseModel):
     access_token: str
@@ -10,7 +11,7 @@ class TokenData(BaseModel):
 
 
 class User(BaseModel):
-    id : int
+    id : Optional[int]
     name: str
     email: str | None = None
     full_name: str | None = None
