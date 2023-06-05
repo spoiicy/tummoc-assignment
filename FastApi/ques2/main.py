@@ -131,3 +131,40 @@ async def read_own_items(
     current_user: Annotated[schema.User, Depends(get_current_active_user)]
 ):
     return [{"item_id": "Foo", "owner": current_user.name}]
+
+
+def create_user(username: str, password: str,db):
+    hashed_password = pwd_context.hash(password)
+    user = models.User(name=username,hashed_password=hashed_password)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    db.close()
+    return user
+
+@app.post("/register")
+def register(username: str, password: str,db:Session = Depends(get_db)):
+    user = get_user(db,username)
+    if user:
+        raise HTTPException(status_code=400, detail="Username already registered")
+    user = create_user(username, password,db)
+    return {"username": user.name}
+
+
+@app.get("/protected")
+def protected_route(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid authentication token")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid authentication token")
+    
+    # Check if the token has expired
+    token_expiration = datetime.fromtimestamp(payload["exp"])
+    current_time = datetime.now()
+    if current_time > token_expiration:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    
+    return {"message": "You are logged in as: " + username}
