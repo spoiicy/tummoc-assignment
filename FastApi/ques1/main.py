@@ -97,7 +97,6 @@ def delete_teachers(teacher_id: int, teacher: schemas.Teacher,session: Session =
     db_teacher = session.query(models.Teacher).get(teacher_id)
     session.delete(db_teacher)
     session.commit()
-    # session.refresh(db_student)
     return {"message":"Teacher deleted"}
 
 
@@ -112,23 +111,3 @@ def assign_student_to_teacher(student_id : int, teacher_id : int, student: schem
 
 
 
-# @app.put("/teachers/{teacher_id}/assign")
-# def assign_students_to_teacher(
-#     teacher_id: int,
-#     student_ids: List[int],
-#     session: Session = Depends(get_session)
-# ):
-#     teacher = session.query(models.Teacher).get(teacher_id)
-#     if not teacher:
-#         raise HTTPException(status_code=404, detail="Teacher not found")
-
-#     students = session.query(models.Student).filter(models.Student.id.in_(student_ids)).all()
-#     if not students:
-#         raise HTTPException(status_code=404, detail="Students not found")
-
-#     for student in students:
-#         student.teacher_id = teacher.id
-
-#     session.commit()
-
-#     return {"message": f"Students assigned to teacher {teacher_id} successfully"}
