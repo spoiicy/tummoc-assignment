@@ -1,15 +1,16 @@
-def isValidCredit(number="3703600000000019"):
+def isValidCredit(number):
+    number = str(number)
     size = len(number)
     if((number[0]=="4" and size==13) or (number[0]=="5" and size == 13) or (number[0] == "6" and size == 16) or (number[0]=='3' and number[1]=='7' and size == 16)):
         print("credit card format is valid")
-        return isValidNumber()
+        return isValidNumber(number)
     else:
         print("credit card format not valid")
         return False
 
 
 
-def isValidNumber(number="3703600000000019"):
+def isValidNumber(number):
     
     total = 0 
     isEven = False
@@ -26,10 +27,12 @@ def isValidNumber(number="3703600000000019"):
     return True if (total%10==0) else False
     
 
-if isValidCredit():
+credit_card_number = input("enter credit card number")
+
+
+if isValidCredit(credit_card_number):
     print("Credit Card Number is valid")
 else:
     print("Credit Card Number is not valid")
-# print(isValidCredit())
 
 
